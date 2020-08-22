@@ -102,7 +102,7 @@ UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
         super.viewDidLoad()
         setupDefaults()
         setupSubviews()
-        setupConstraints()
+//        setupConstraints()
         setupDelegates()
         addMenuControllerObservers()
         addObservers()
