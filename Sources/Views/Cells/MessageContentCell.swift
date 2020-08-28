@@ -154,6 +154,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         cellBottomLabel.attributedText = bottomCellLabelText
         messageTopLabel.attributedText = topMessageLabelText
         messageBottomLabel.attributedText = bottomMessageLabelText
+        print(">>>>> topCellLabelText = \(topCellLabelText) \n bottomCellLabelText = \(bottomCellLabelText) \n topMessageLabelText = \(topMessageLabelText) \n bottomMessageLabelText =\(bottomMessageLabelText)")
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -258,7 +259,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         case .cellTrailing:
             origin.x = attributes.frame.width - attributes.avatarSize.width - attributes.messageContainerSize.width - attributes.messageContainerPadding.right - avatarPadding
         case .natural:
-            fatalError(MessageKitError.avatarPositionUnresolved)
+            fatalError(MessageKitError.avatarPositionUnresolved) //Fer ***
         }
 
         messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
@@ -269,8 +270,24 @@ open class MessageContentCell: MessageCollectionViewCell {
     open func layoutCellTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
         cellTopLabel.textAlignment = attributes.cellTopLabelAlignment.textAlignment
         cellTopLabel.textInsets = attributes.cellTopLabelAlignment.textInsets
-
-        cellTopLabel.frame = CGRect(origin: .zero, size: attributes.cellTopLabelSize)
+        var x: CGFloat = 0
+        let textWidth: CGFloat = 50
+        let SCREEN_WIDTH = UIScreen.main.bounds.size.width
+        let offset: CGFloat = 35
+        if attributes.avatarSize.width == 0 {
+            x = SCREEN_WIDTH - messageContainerView.frame.width - textWidth - offset
+            cellTopLabel.textAlignment = .right
+            
+        } else {
+            x = attributes.avatarSize.width + messageContainerView.frame.width + 10
+            cellTopLabel.textAlignment = .left
+        }
+        print("messageContainerView.frame.width = \(messageContainerView.frame.width) \n SCREEN_WIDTH = \(SCREEN_WIDTH) \n attributes.avatarSize.width = \(attributes.avatarSize.width)")
+        let y = messageContainerView.frame.maxY - 30
+        let origin = CGPoint(x: x, y: y)
+        let size = CGSize(width: textWidth, height: 40)
+        cellTopLabel.frame = CGRect(origin: origin, size: size)
+        print("size of topcell: \(attributes.cellTopLabelSize)")
     }
     
     /// Positions the cell's bottom label.
@@ -288,13 +305,14 @@ open class MessageContentCell: MessageCollectionViewCell {
     /// Positions the message bubble's top label.
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutMessageTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
-        messageTopLabel.textAlignment = attributes.messageTopLabelAlignment.textAlignment
+        messageTopLabel.textAlignment = .center//attributes.messageTopLabelAlignment.textAlignment
         messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
 
-        let y = messageContainerView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
+        let y = -10//messageContainerView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
         let origin = CGPoint(x: 0, y: y)
         
-        messageTopLabel.frame = CGRect(origin: origin, size: attributes.messageTopLabelSize)
+        let size = CGSize(width: 50, height: 18)
+        messageTopLabel.frame = CGRect(origin: origin, size: size)
     }
 
     /// Positions the message bubble's bottom label.
