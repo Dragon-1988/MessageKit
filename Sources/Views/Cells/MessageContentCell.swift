@@ -46,6 +46,9 @@ open class MessageContentCell: MessageCollectionViewCell {
         return label
     }()
     
+    // The option button to delete media content
+    open var deleteView = UIView()
+    
     /// The bottom label of the cell.
     open var cellBottomLabel: InsetLabel = {
         let label = InsetLabel()
@@ -94,6 +97,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(cellBottomLabel)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
+        contentView.addSubview(deleteView)
     }
 
     open override func prepareForReuse() {
@@ -176,6 +180,8 @@ open class MessageContentCell: MessageCollectionViewCell {
             delegate?.didTapMessageBottomLabel(in: self)
         case accessoryView.frame.contains(touchLocation):
             delegate?.didTapAccessoryView(in: self)
+        case deleteView.frame.contains(touchLocation):
+            delegate?.didTapDeleteView(in: self)
         default:
             delegate?.didTapBackground(in: self)
         }
@@ -288,6 +294,32 @@ open class MessageContentCell: MessageCollectionViewCell {
         let size = CGSize(width: textWidth, height: 40)
         cellTopLabel.frame = CGRect(origin: origin, size: size)
         print("size of topcell: \(attributes.cellTopLabelSize)")
+        
+        // SV: 25.01 add view to can delete media message
+        if attributes.avatarSize.width == 0 {
+            print("messageContainerView.frame.width = \(messageContainerView.frame.width) \n SCREEN_WIDTH = \(SCREEN_WIDTH) \n attributes.avatarSize.width = \(attributes.avatarSize.width)")
+            let y = messageContainerView.frame.maxY - 30
+            let origin = CGPoint(x: x, y: y)
+            let size = CGSize(width: textWidth, height: 40)
+            cellTopLabel.frame = CGRect(origin: origin, size: size)
+            print("size of topcell: \(attributes.cellTopLabelSize)")
+            
+            // SV: set frame for deleteView
+            let deleteOffset: CGFloat = 30
+            let deleteViewY: CGFloat = 0.0
+            let deleteOrigin = CGPoint(x: x + textWidth - deleteOffset, y: deleteViewY)
+            let deleteSize = CGSize(width: 40, height: 40)
+            deleteView.frame = CGRect(origin: deleteOrigin, size: deleteSize)
+    //        deleteView.backgroundColor = .green
+            let imageView = UIImageView()
+            deleteView.addSubview(imageView)
+            imageView.image = UIImage(named: "option-menu-h15")
+            imageView.contentMode = .scaleAspectFit
+    //        imageView.fillSuperview()
+            imageView.centerInSuperview()
+            imageView.constraint(equalTo: CGSize(width: 15, height: 20))
+        }
+
     }
     
     /// Positions the cell's bottom label.
