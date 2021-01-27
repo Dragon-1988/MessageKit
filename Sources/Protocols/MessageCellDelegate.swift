@@ -58,6 +58,8 @@ public protocol MessageCellDelegate: MessageLabelDelegate {
     /// `indexPath(for: cell)` method. Then using the returned `IndexPath` with the `MessagesDataSource`
     /// method `messageForItem(at:indexPath:messagesCollectionView)`.
     func didTapAvatar(in cell: MessageCollectionViewCell)
+    
+    func didTapDeleteView(in cell: MessageCollectionViewCell)
 
     /// Triggered when a tap occurs in the cellTopLabel.
     ///
@@ -168,6 +170,8 @@ public extension MessageCellDelegate {
     func didTapMessage(in cell: MessageCollectionViewCell) {}
 
     func didTapAvatar(in cell: MessageCollectionViewCell) {}
+
+    func didTapDeleteView(in cell: MessageCollectionViewCell) {}
 
     func didTapCellTopLabel(in cell: MessageCollectionViewCell) {}
     
